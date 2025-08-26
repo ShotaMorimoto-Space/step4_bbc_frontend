@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { SettingsLayout } from '@/src/components/SettingsLayout';
 import { CommonButton } from '@/src/components/CommonLayout';
+import { getLocalStorageItem, setLocalStorageItem, clearLocalStorage } from '@/src/utils/storage';
 
 export default function UserSettingsPage() {
   const router = useRouter();
@@ -78,9 +79,9 @@ export default function UserSettingsPage() {
   // 認証状態の確認
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('access_token');
-      const email = localStorage.getItem('user_email');
-      const userId = localStorage.getItem('user_id');
+      const token = getLocalStorageItem('access_token');
+      const email = getLocalStorageItem('user_email');
+      const userId = getLocalStorageItem('user_id');
       
       console.log('設定画面認証チェック:', {
         token: token ? 'あり' : 'なし',
@@ -120,7 +121,7 @@ export default function UserSettingsPage() {
             }
             
             if (fetchedUserId) {
-              localStorage.setItem('user_id', fetchedUserId);
+              setLocalStorageItem('user_id', fetchedUserId);
               console.log('APIから取得したuser_idを保存:', fetchedUserId);
             } else {
               console.warn('/api/auth/meレスポンスにuser_idが含まれていません:', userData);
@@ -136,27 +137,27 @@ export default function UserSettingsPage() {
       // ユーザー情報をローカルストレージから取得
       setUserInfo(prev => ({
         ...prev,
-        name: localStorage.getItem('user_name') || '',
+        name: getLocalStorageItem('user_name') || '',
         email: email,
-        avatar: localStorage.getItem('user_avatar') || '',
-        phone: localStorage.getItem('user_phone') || '',
-        birthDate: localStorage.getItem('user_birth_date') || '',
-        gender: localStorage.getItem('user_gender') || '',
-        experience: localStorage.getItem('user_experience') || '',
-        bio: localStorage.getItem('user_bio') || '',
-        lineUserId: localStorage.getItem('user_line_user_id') || '',
-        zipCode: localStorage.getItem('user_zip_code') || '',
-        state: localStorage.getItem('user_state') || '',
-        address1: localStorage.getItem('user_address1') || '',
-        address2: localStorage.getItem('user_address2') || '',
-        sportExp: localStorage.getItem('user_sport_exp') || '',
-        industry: localStorage.getItem('user_industry') || '',
-        jobTitle: localStorage.getItem('user_job_title') || '',
-        position: localStorage.getItem('user_position') || ''
+        avatar: getLocalStorageItem('user_avatar') || '',
+        phone: getLocalStorageItem('user_phone') || '',
+        birthDate: getLocalStorageItem('user_birth_date') || '',
+        gender: getLocalStorageItem('user_gender') || '',
+        experience: getLocalStorageItem('user_experience') || '',
+        bio: getLocalStorageItem('user_bio') || '',
+        lineUserId: getLocalStorageItem('user_line_user_id') || '',
+        zipCode: getLocalStorageItem('user_zip_code') || '',
+        state: getLocalStorageItem('user_state') || '',
+        address1: getLocalStorageItem('user_address1') || '',
+        address2: getLocalStorageItem('user_address2') || '',
+        sportExp: getLocalStorageItem('user_sport_exp') || '',
+        industry: getLocalStorageItem('user_industry') || '',
+        jobTitle: getLocalStorageItem('user_job_title') || '',
+        position: getLocalStorageItem('user_position') || ''
       }));
 
       // 通知設定をローカルストレージから取得
-      const savedNotifications = localStorage.getItem('notification_settings');
+              const savedNotifications = getLocalStorageItem('notification_settings');
       if (savedNotifications) {
         try {
           setNotificationSettings(JSON.parse(savedNotifications));
@@ -233,7 +234,7 @@ export default function UserSettingsPage() {
     
     try {
       // ローカルストレージに保存
-      localStorage.setItem('notification_settings', JSON.stringify(notificationSettings));
+              setLocalStorageItem('notification_settings', JSON.stringify(notificationSettings));
       
       setSuccessMessage('通知設定が更新されました');
       
@@ -248,7 +249,7 @@ export default function UserSettingsPage() {
 
   // ログアウト
   const handleLogout = () => {
-    localStorage.clear();
+            clearLocalStorage();
     router.push('/auth/login');
   };
 
@@ -489,10 +490,10 @@ export default function UserSettingsPage() {
       {/* デバッグ情報 */}
       <div className="mt-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs">
         <div className="font-bold mb-2">認証情報デバッグ:</div>
-        <div>アクセストークン: {localStorage.getItem('access_token') ? 'あり' : 'なし'}</div>
-        <div>ユーザーID: {localStorage.getItem('user_id') || 'なし'}</div>
-        <div>メール: {localStorage.getItem('user_email') || 'なし'}</div>
-        <div>ロール: {localStorage.getItem('user_role') || 'なし'}</div>
+                    <div>アクセストークン: {getLocalStorageItem('access_token') ? 'あり' : 'なし'}</div>
+            <div>ユーザーID: {getLocalStorageItem('user_id') || 'なし'}</div>
+            <div>メール: {getLocalStorageItem('user_email') || 'なし'}</div>
+            <div>ロール: {getLocalStorageItem('user_role') || 'なし'}</div>
       </div>
 
       {/* ログアウトボタン */}

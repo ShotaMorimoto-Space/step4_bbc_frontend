@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Save, X, User, Camera } from 'lucide-react';
 import { SettingsLayout } from '@/src/components/SettingsLayout';
 import { CommonButton, CommonInput, CommonErrorMessage } from '@/src/components/CommonLayout';
+import { getLocalStorageItem, setLocalStorageItem } from '@/src/utils/storage';
 
 export default function BasicInfoEditPage() {
   const router = useRouter();
@@ -24,9 +25,9 @@ export default function BasicInfoEditPage() {
   // 認証状態の確認とユーザー情報の取得
   useEffect(() => {
     const checkAuth = () => {
-      const token = localStorage.getItem('access_token');
-      const email = localStorage.getItem('user_email');
-      const userId = localStorage.getItem('user_id');
+      const token = getLocalStorageItem('access_token');
+      const email = getLocalStorageItem('user_email');
+      const userId = getLocalStorageItem('user_id');
       
       console.log('認証チェック:', {
         token: token ? 'あり' : 'なし',
@@ -42,10 +43,10 @@ export default function BasicInfoEditPage() {
 
       // ユーザー情報をローカルストレージから取得
       setUserInfo({
-        name: localStorage.getItem('user_name') || '',
-        birthDate: localStorage.getItem('user_birth_date') || '',
-        gender: localStorage.getItem('user_gender') || '',
-        avatar: localStorage.getItem('user_avatar') || ''
+        name: getLocalStorageItem('user_name') || '',
+        birthDate: getLocalStorageItem('user_birth_date') || '',
+        gender: getLocalStorageItem('user_gender') || '',
+        avatar: getLocalStorageItem('user_avatar') || ''
       });
     };
 
@@ -89,14 +90,13 @@ export default function BasicInfoEditPage() {
     setErrorMessage('');
     
     try {
-      const accessToken = localStorage.getItem('access_token');
-      const userId = localStorage.getItem('user_id');
+      const accessToken = getLocalStorageItem('access_token');
+      const userId = getLocalStorageItem('user_id');
       
       // デバッグ情報をコンソールに出力
       console.log('認証情報確認:', {
         accessToken: accessToken ? 'あり' : 'なし',
-        userId: userId || 'なし',
-        localStorageKeys: Object.keys(localStorage)
+        userId: userId || 'なし'
       });
       
       if (!accessToken) {
@@ -106,7 +106,7 @@ export default function BasicInfoEditPage() {
       // userIdが取得できない場合は、メールアドレスから取得を試行
       let actualUserId = userId;
       if (!actualUserId) {
-        const email = localStorage.getItem('user_email');
+        const email = getLocalStorageItem('user_email');
         if (email) {
           // メールアドレスからユーザーIDを取得するAPIを呼び出す
           try {
@@ -202,11 +202,11 @@ export default function BasicInfoEditPage() {
         throw new Error(errorMessage);
       }
 
-      // ローカルストレージに保存
-      localStorage.setItem('user_name', userInfo.name);
-      localStorage.setItem('user_gender', userInfo.gender);
-      localStorage.setItem('user_birth_date', userInfo.birthDate);
-      localStorage.setItem('user_avatar', userInfo.avatar);
+              // ローカルストレージに保存
+        setLocalStorageItem('user_name', userInfo.name);
+        setLocalStorageItem('user_gender', userInfo.gender);
+        setLocalStorageItem('user_birth_date', userInfo.birthDate);
+        setLocalStorageItem('user_avatar', userInfo.avatar);
       
       setSuccessMessage('基本情報が更新されました');
       
@@ -250,9 +250,9 @@ export default function BasicInfoEditPage() {
         {/* デバッグ情報 */}
         <div className="mb-6 p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs">
           <div>デバッグ情報:</div>
-          <div>アクセストークン: {localStorage.getItem('access_token') ? 'あり' : 'なし'}</div>
-          <div>ユーザーID: {localStorage.getItem('user_id') || 'なし'}</div>
-          <div>メール: {localStorage.getItem('user_email') || 'なし'}</div>
+                        <div>アクセストークン: {getLocalStorageItem('access_token') ? 'あり' : 'なし'}</div>
+              <div>ユーザーID: {getLocalStorageItem('user_id') || 'なし'}</div>
+              <div>メール: {getLocalStorageItem('user_email') || 'なし'}</div>
         </div>
 
         {/* 編集フォーム */}
