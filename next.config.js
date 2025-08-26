@@ -5,8 +5,8 @@ const nextConfig = {
   compress: true,
   generateEtags: false,
   
-  // Azureデプロイ用設定（APIルート対応）
-  // output: 'export', // APIルートを使用する場合は無効化
+  // Azure App Service用設定
+  output: 'standalone', // スタンドアロンビルドで依存関係を含める
   trailingSlash: true,
   images: {
     unoptimized: true
