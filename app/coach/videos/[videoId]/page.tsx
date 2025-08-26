@@ -135,6 +135,7 @@ export default function CoachVideoDetailPage() {
 
   // 動画再生の制御
   const handleVideoClick = () => {
+    if (!video) return;
     console.log('動画再生開始:', video.video_url);
     setIsPlaying(true);
   };

@@ -88,13 +88,22 @@ export default function App() {
   const [genderData, setGenderData] = useState<'male' | 'female' | ''>('');
   const [mailData, setMailData] = useState('');
   const [currentVideoId, setCurrentVideoId] = useState<string>('');
-// ★追加：依頼プレビュー用draft
-const [requestDraft, setRequestDraft] = useState({
-  videoThumb: '',
-  club: '',
-  problems: [] as string[],
-  note: ''
-});
+  // ★追加：依頼プレビュー用draft
+  const [requestDraft, setRequestDraft] = useState({
+    videoThumb: '',
+    club: '',
+    problems: [] as string[],
+    note: ''
+  });
+  
+  // ログイン用の状態管理
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  // サインアップ用の状態管理
+  const [confirmPassword, setConfirmPassword] = useState('');
 
 
   useEffect(() => {
@@ -242,10 +251,7 @@ const [requestDraft, setRequestDraft] = useState({
   };
 
   const renderSignInScreen = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    // 親コンポーネントの状態を使用
 
     const handleLogin = async () => {
       if (!email || !password) {
@@ -348,11 +354,7 @@ const [requestDraft, setRequestDraft] = useState({
   };
 
   const renderSignUpScreen = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    // 親コンポーネントの状態を使用
 
     const handleSignUp = async () => {
       if (!email || !password || !confirmPassword) {
