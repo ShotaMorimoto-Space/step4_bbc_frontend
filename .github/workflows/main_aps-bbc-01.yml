@@ -26,24 +26,14 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build
+          npm run build --if-present
           npm run test --if-present
-
-      - name: Prepare deployment files
-        run: |
-          # ビルド済みファイルのみを準備
-          mkdir -p deploy
-          cp -r .next deploy/
-          cp -r public deploy/
-          cp package.json deploy/
-          cp next.config.js deploy/
-          cp -r node_modules deploy/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: deploy/
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -62,4 +52,4 @@ jobs:
           app-name: 'aps-bbc-01'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5799D5BC9BA34903B47D7412EFDC819F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_83EF026EE18D4B23923612E462A7EFEF }}
