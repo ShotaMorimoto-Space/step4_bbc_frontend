@@ -75,7 +75,7 @@ export default function CustomVideoSlider({
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseMove = (e: globalThis.MouseEvent) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging || !sliderRef.current) return;
     
     const rect = sliderRef.current.getBoundingClientRect();
@@ -88,7 +88,7 @@ export default function CustomVideoSlider({
     onSeek(newTime);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e?: MouseEvent) => {
     setIsDragging(false);
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
@@ -127,9 +127,28 @@ export default function CustomVideoSlider({
               className="relative h-8 bg-gray-800 rounded-lg cursor-pointer overflow-hidden"
               onClick={handleSliderClick}
               onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              onMouseMove={(e) => {
+                if (isDragging) {
+                  const rect = sliderRef.current?.getBoundingClientRect();
+                  if (rect) {
+                    const mouseX = e.clientX - rect.left;
+                    const sliderWidth = rect.width;
+                    const percentage = Math.max(0, Math.min(1, mouseX / sliderWidth));
+                    const newTime = percentage * duration;
+                    onSeek(newTime);
+                  }
+                }
+              }}
+              onMouseUp={(e) => {
+                setIsDragging(false);
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+              }}
+              onMouseLeave={(e) => {
+                setIsDragging(false);
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+              }}
                           onTouchStart={(e) => {
               const touch = e.touches[0];
               const rect = sliderRef.current?.getBoundingClientRect();
